@@ -12,6 +12,7 @@ public class QuizActivity extends Activity {
 	private Button mTrueButton;
 	private Button mFalseButton;
 	private Button mNextButton;
+	private Button mPrevButton;
 	private TextView mQuestionTextView;
 
 	private TrueFalse[] mQuestionBank = new TrueFalse[] {
@@ -50,8 +51,7 @@ public class QuizActivity extends Activity {
 		mQuestionTextView.setOnClickListener(new View.OnClickListener() {			
 			@Override
 			public void onClick(View arg0) {
-				mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
-                updateQuestion();
+                updateQuestion(true);
 			}
 		});
 		
@@ -59,18 +59,39 @@ public class QuizActivity extends Activity {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
-                updateQuestion();
+                updateQuestion(true);
             }
         });
         
-        updateQuestion();
+        mPrevButton = (Button)findViewById(R.id.prev_button);
+        mPrevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateQuestion(false);
+            }
+        });
+        
+        updateQuestion(null);
 		
 	}
 	
-	private void updateQuestion(){
+	private void updateQuestion(Boolean isForward){
+		if(isForward == null){
+			System.out.println("No se modificó el mCurrentIndex");
+		} else if(isForward == true) {
+			mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
+			System.out.println("NEXT mCurrentIndex: " + mCurrentIndex);
+		} else if(isForward == false){
+			mCurrentIndex = mCurrentIndex - 1;
+			if(mCurrentIndex == -1){
+				mCurrentIndex = mQuestionBank.length - 1;
+			}
+			System.out.println("PREV mCurrentIndex: " + mCurrentIndex);
+		} 
+		
 		int question = mQuestionBank[mCurrentIndex].getQuestion();
         mQuestionTextView.setText(question);
+        
 	}
 	
 	private void checkAnswer(boolean userPressedTrue) {
