@@ -2,6 +2,7 @@ package com.example.geoquiz;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,8 @@ public class QuizActivity extends Activity {
 	private ImageButton mNextButton;
 	private ImageButton mPrevButton;
 	private TextView mQuestionTextView;
+    private static final String TAG = "QuizActivity";
+
 
 	private TrueFalse[] mQuestionBank = new TrueFalse[] {
 			new TrueFalse(R.string.question_oceans, true),
@@ -28,13 +31,16 @@ public class QuizActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		Log.d(TAG, "onCreate(Bundle) called");
+		
 		setContentView(R.layout.activity_quiz);
 		mTrueButton = (Button) findViewById(R.id.true_button);
 		mTrueButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				System.out.println("Botón TRUE clickeado...");
+				Log.d(TAG, "Botón TRUE clickeado...");
 				checkAnswer(true);
 			}
 		});
@@ -43,7 +49,7 @@ public class QuizActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				System.out.println("Botón FALSE clickeado...");
+				Log.d(TAG, "Botón FALSE clickeado...");
 				checkAnswer(false);
 			}
 		});
@@ -78,16 +84,16 @@ public class QuizActivity extends Activity {
 	
 	private void updateQuestion(Boolean isForward){
 		if(isForward == null){
-			System.out.println("No se modificó el mCurrentIndex");
+			Log.d(TAG, "No se modificó el mCurrentIndex");
 		} else if(isForward == true) {
 			mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
-			System.out.println("NEXT mCurrentIndex: " + mCurrentIndex);
+			Log.d(TAG, "NEXT mCurrentIndex: " + mCurrentIndex);
 		} else if(isForward == false){
 			mCurrentIndex = mCurrentIndex - 1;
 			if(mCurrentIndex == -1){
 				mCurrentIndex = mQuestionBank.length - 1;
 			}
-			System.out.println("PREV mCurrentIndex: " + mCurrentIndex);
+			Log.d(TAG, "PREV mCurrentIndex: " + mCurrentIndex);
 		} 
 		
 		int question = mQuestionBank[mCurrentIndex].getQuestion();
@@ -116,5 +122,35 @@ public class QuizActivity extends Activity {
 		getMenuInflater().inflate(R.menu.quiz, menu);
 		return true;
 	}
+	
+	@Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart() called");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause() called");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume() called");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop() called");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy() called");
+    }
 
 }
