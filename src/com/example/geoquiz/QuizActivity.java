@@ -17,6 +17,8 @@ public class QuizActivity extends Activity {
 	private ImageButton mPrevButton;
 	private TextView mQuestionTextView;
     private static final String TAG = "QuizActivity";
+    private static final String KEY_INDEX = "index";
+
 
 
 	private TrueFalse[] mQuestionBank = new TrueFalse[] {
@@ -78,9 +80,22 @@ public class QuizActivity extends Activity {
             }
         });
         
+        if (savedInstanceState != null) {
+        	Log.d(TAG, "Ya había un valor guardado, recuperando");
+            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+        }
+        
         updateQuestion(null);
 		
 	}
+	
+	@Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        Log.i(TAG, "onSaveInstanceState");
+        savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+    }
+
 	
 	private void updateQuestion(Boolean isForward){
 		if(isForward == null){
