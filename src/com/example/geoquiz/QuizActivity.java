@@ -1,6 +1,7 @@
 package com.example.geoquiz;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -11,112 +12,121 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class QuizActivity extends Activity {
-	private Button mTrueButton;
-	private Button mFalseButton;
-	private ImageButton mNextButton;
-	private ImageButton mPrevButton;
-	private TextView mQuestionTextView;
+
+    private Button mTrueButton;
+    private Button mFalseButton;
+    private Button mCheatButton;
+    private ImageButton mNextButton;
+    private ImageButton mPrevButton;
+    private TextView mQuestionTextView;
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
 
+    private TrueFalse[] mQuestionBank = new TrueFalse[]{
+        new TrueFalse(R.string.question_oceans, true),
+        new TrueFalse(R.string.question_mideast, false),
+        new TrueFalse(R.string.question_africa, false),
+        new TrueFalse(R.string.question_americas, true),
+        new TrueFalse(R.string.question_asia, true),};
 
+    private int mCurrentIndex = 0;
 
-	private TrueFalse[] mQuestionBank = new TrueFalse[] {
-			new TrueFalse(R.string.question_oceans, true),
-			new TrueFalse(R.string.question_mideast, false),
-			new TrueFalse(R.string.question_africa, false),
-			new TrueFalse(R.string.question_americas, true),
-			new TrueFalse(R.string.question_asia, true), };
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-	private int mCurrentIndex = 0;
+        Log.d(TAG, "onCreate(Bundle) called");
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		Log.d(TAG, "onCreate(Bundle) called");
-		
-		setContentView(R.layout.activity_quiz);
-		mTrueButton = (Button) findViewById(R.id.true_button);
-		mTrueButton.setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.activity_quiz);
+        mTrueButton = (Button) findViewById(R.id.true_button);
+        mTrueButton.setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				Log.d(TAG, "Botón TRUE clickeado...");
-				checkAnswer(true);
-			}
-		});
-		mFalseButton = (Button) findViewById(R.id.false_button);
-		mFalseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Botón TRUE clickeado...");
+                checkAnswer(true);
+            }
+        });
+        mFalseButton = (Button) findViewById(R.id.false_button);
+        mFalseButton.setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				Log.d(TAG, "Botón FALSE clickeado...");
-				checkAnswer(false);
-			}
-		});
-		
-		mQuestionTextView = (TextView)findViewById(R.id.question_text_view);
-		mQuestionTextView.setOnClickListener(new View.OnClickListener() {			
-			@Override
-			public void onClick(View arg0) {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Botón FALSE clickeado...");
+                checkAnswer(false);
+            }
+        });
+
+        mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
+        mQuestionTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
                 updateQuestion(true);
-			}
-		});
-		
-        mNextButton = (ImageButton)findViewById(R.id.next_button);
+            }
+        });
+
+        mNextButton = (ImageButton) findViewById(R.id.next_button);
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateQuestion(true);
             }
         });
-        
-        mPrevButton = (ImageButton)findViewById(R.id.prev_button);
+
+        mPrevButton = (ImageButton) findViewById(R.id.prev_button);
         mPrevButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateQuestion(false);
             }
         });
+
+        mCheatButton = (Button)findViewById(R.id.cheat_button);
+        mCheatButton.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+                Log.d(TAG, "Presionando botón Cheat");
+                Intent i = new Intent(QuizActivity.this, CheatActivity.class);
+                startActivity(i);
+            }
+        });
         
         if (savedInstanceState != null) {
-        	Log.d(TAG, "Ya había un valor guardado, recuperando");
+            Log.d(TAG, "Ya había un valor guardado, recuperando");
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
         }
-        
+
         updateQuestion(null);
-		
-	}
-	
-	@Override
+
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         Log.i(TAG, "onSaveInstanceState");
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
     }
 
-	
-	private void updateQuestion(Boolean isForward){
-		if(isForward == null){
-			Log.d(TAG, "No se modificó el mCurrentIndex");
-		} else if(isForward == true) {
-			mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
-			Log.d(TAG, "NEXT mCurrentIndex: " + mCurrentIndex);
-		} else if(isForward == false){
-			mCurrentIndex = mCurrentIndex - 1;
-			if(mCurrentIndex == -1){
-				mCurrentIndex = mQuestionBank.length - 1;
-			}
-			Log.d(TAG, "PREV mCurrentIndex: " + mCurrentIndex);
-		} 
-		
-		int question = mQuestionBank[mCurrentIndex].getQuestion();
+    private void updateQuestion(Boolean isForward) {
+        if (isForward == null) {
+            Log.d(TAG, "No se modificó el mCurrentIndex");
+        } else if (isForward == true) {
+            mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
+            Log.d(TAG, "NEXT mCurrentIndex: " + mCurrentIndex);
+        } else if (isForward == false) {
+            mCurrentIndex = mCurrentIndex - 1;
+            if (mCurrentIndex == -1) {
+                mCurrentIndex = mQuestionBank.length - 1;
+            }
+            Log.d(TAG, "PREV mCurrentIndex: " + mCurrentIndex);
+        }
+
+        int question = mQuestionBank[mCurrentIndex].getQuestion();
         mQuestionTextView.setText(question);
-        
-	}
-	
-	private void checkAnswer(boolean userPressedTrue) {
+
+    }
+
+    private void checkAnswer(boolean userPressedTrue) {
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isTrueQuestion();
 
         int messageResId = 0;
@@ -128,17 +138,17 @@ public class QuizActivity extends Activity {
         }
 
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
-            .show();
+                .show();
     }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.quiz, menu);
-		return true;
-	}
-	
-	@Override
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.quiz, menu);
+        return true;
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         Log.d(TAG, "onStart() called");
