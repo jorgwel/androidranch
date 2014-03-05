@@ -22,6 +22,7 @@ public class QuizActivity extends Activity {
     private boolean mIsCheater;
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
+    private static final String KEY_IS_CHEATER = "index";
 
     private TrueFalse[] mQuestionBank = new TrueFalse[]{
         new TrueFalse(R.string.question_oceans, true),
@@ -98,6 +99,8 @@ public class QuizActivity extends Activity {
         if (savedInstanceState != null) {
             Log.d(TAG, "Ya había un valor guardado, recuperando");
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+//            mIsCheater = savedInstanceState.getBoolean(KEY_INDEX, false);
+            mIsCheater = false;//On Rotate, clears "I'm a cheater DATA"
         }
 
         updateQuestion(null);
@@ -109,6 +112,7 @@ public class QuizActivity extends Activity {
         super.onSaveInstanceState(savedInstanceState);
         Log.i(TAG, "onSaveInstanceState");
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+        savedInstanceState.putBoolean(KEY_IS_CHEATER, mIsCheater);
     }
 
     private void updateQuestion(Boolean isForward) {
