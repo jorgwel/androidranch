@@ -60,7 +60,8 @@ public class CheatActivity extends Activity {
         if(savedInstanceState != null) {
             Log.d(TAG, "Recuperando info de hasCheated");
             hasCheated = savedInstanceState.getBoolean(KEY_HAS_CHEATED);
-            setAnswerShownResult(hasCheated);
+//            setAnswerShownResult(hasCheated);
+            setAnswerShownResult(false);//On Rotate, clears "I'm a cheater DATA"
             mAnswerIsTrue = savedInstanceState.getBoolean(KEY_ANSWER_TRUE);
             Log.d(TAG, "Re iniciando. hasCheated: " + hasCheated);
             if(hasCheated){
