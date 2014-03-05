@@ -60,7 +60,9 @@ public class CheatActivity extends Activity {
         if(savedInstanceState != null) {
             Log.d(TAG, "Recuperando info de hasCheated");
             hasCheated = savedInstanceState.getBoolean(KEY_HAS_CHEATED);
+            setAnswerShownResult(hasCheated);
             mAnswerIsTrue = savedInstanceState.getBoolean(KEY_ANSWER_TRUE);
+            Log.d(TAG, "Re iniciando. hasCheated: " + hasCheated);
             if(hasCheated){
                 mostrarResultado();
             }
@@ -80,7 +82,6 @@ public class CheatActivity extends Activity {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         Log.i(TAG, "onSaveInstanceState");
-        setAnswerShownResult(false);
         savedInstanceState.putBoolean(KEY_HAS_CHEATED, hasCheated);
         savedInstanceState.putBoolean(KEY_ANSWER_TRUE, mAnswerIsTrue);
         
@@ -95,6 +96,10 @@ public class CheatActivity extends Activity {
         }
         setAnswerShownResult(true);
         
+    }
+    
+    private void ocultarResultado() {
+        mAnswerTextView.setText("");
     }
     
 }
