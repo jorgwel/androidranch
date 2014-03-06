@@ -29,6 +29,8 @@ public class CheatActivity extends Activity {
     
     private boolean mAnswerIsTrue;
     private boolean hasCheated;
+    
+    private int mCurrentQuestionIndex;
 
     private TextView mAnswerTextView;
     private Button mShowAnswer;
@@ -43,6 +45,7 @@ public class CheatActivity extends Activity {
         setContentView(R.layout.activity_cheat);
         //Recibe el Intent enviado desde QuizActivity
         mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
+        mCurrentQuestionIndex = getIntent().getIntExtra(QuizActivity.CURRENT_INDEX, 0);
 
         mAnswerTextView = (TextView)findViewById(R.id.answerTextView);
 
@@ -75,6 +78,7 @@ public class CheatActivity extends Activity {
     private void setAnswerShownResult(boolean isAnswerShown) {
         Intent data = new Intent();
         data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);
+        data.putExtra(QuizActivity.CURRENT_INDEX, mCurrentQuestionIndex);
         setResult(RESULT_OK, data);
         hasCheated = isAnswerShown;
     }

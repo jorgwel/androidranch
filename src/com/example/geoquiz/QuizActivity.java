@@ -19,17 +19,22 @@ public class QuizActivity extends Activity {
     private ImageButton mNextButton;
     private ImageButton mPrevButton;
     private TextView mQuestionTextView;
-    private boolean mIsCheater;
+//    private boolean mIsCheater;
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
-    private static final String KEY_IS_CHEATER = "index";
+//    private static final String KEY_IS_CHEATER = "isCheater";
+    public static final String CURRENT_INDEX = "currentIndex";
+    public static final String CHEATED_VALUES = "cheatedValues";
 
     private TrueFalse[] mQuestionBank = new TrueFalse[]{
         new TrueFalse(R.string.question_oceans, true),
         new TrueFalse(R.string.question_mideast, false),
         new TrueFalse(R.string.question_africa, false),
         new TrueFalse(R.string.question_americas, true),
-        new TrueFalse(R.string.question_asia, true),};
+        new TrueFalse(R.string.question_asia, true)};
+    
+    private boolean[] mCheatedQuestionsBank = new boolean[]{
+        false, false, false, false, false};
 
     private int mCurrentIndex = 0;
 
@@ -71,7 +76,7 @@ public class QuizActivity extends Activity {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mIsCheater = false;
+//                mIsCheater = false;
                 updateQuestion(true);
             }
         });
@@ -91,7 +96,8 @@ public class QuizActivity extends Activity {
                 Log.d(TAG, "Presionando botón Cheat");
                 Intent i = new Intent(QuizActivity.this, CheatActivity.class);
                 boolean answerIsTrue = mQuestionBank[mCurrentIndex].isTrueQuestion();
-                i.putExtra(CheatActivity.EXTRA_ANSWER_IS_TRUE, answerIsTrue);               
+                i.putExtra(CheatActivity.EXTRA_ANSWER_IS_TRUE, answerIsTrue); 
+                i.putExtra(CURRENT_INDEX, mCurrentIndex);
                 startActivityForResult(i, 0);
             }
         });
@@ -99,8 +105,13 @@ public class QuizActivity extends Activity {
         if (savedInstanceState != null) {
             Log.d(TAG, "Ya había un valor guardado, recuperando");
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
-//            mIsCheater = savedInstanceState.getBoolean(KEY_INDEX, false);
-            mIsCheater = false;//On Rotate, clears "I'm a cheater DATA"
+//            mIsCheater = savedInstanceState.getBoolean(KEY_IS_CHEATER, false);
+            mCheatedQuestionsBank = savedInstanceState.getBooleanArray(CHEATED_VALUES);
+            Log.d(TAG, "mCheatedQuestionsBank: " + mCheatedQuestionsBank);
+            mCheatedQuestionsBank[mCurrentIndex] = false;//On Rotate, clears "I'm a cheater DATA"
+            mNextButton.setEnabled(true);
+            mPrevButton.setEnabled(true);
+            
         }
 
         updateQuestion(null);
@@ -112,7 +123,7 @@ public class QuizActivity extends Activity {
         super.onSaveInstanceState(savedInstanceState);
         Log.i(TAG, "onSaveInstanceState");
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
-        savedInstanceState.putBoolean(KEY_IS_CHEATER, mIsCheater);
+        savedInstanceState.putBooleanArray(CHEATED_VALUES, mCheatedQuestionsBank);
     }
 
     private void updateQuestion(Boolean isForward) {
@@ -120,12 +131,16 @@ public class QuizActivity extends Activity {
             Log.d(TAG, "No se modificó el mCurrentIndex");
         } else if (isForward == true) {
             mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
+            if(mCheatedQuestionsBank[mCurrentIndex])
+                mNextButton.setEnabled(false);
             Log.d(TAG, "NEXT mCurrentIndex: " + mCurrentIndex);
         } else if (isForward == false) {
             mCurrentIndex = mCurrentIndex - 1;
             if (mCurrentIndex == -1) {
                 mCurrentIndex = mQuestionBank.length - 1;
             }
+            if(mCheatedQuestionsBank[mCurrentIndex])
+                mPrevButton.setEnabled(false);
             Log.d(TAG, "PREV mCurrentIndex: " + mCurrentIndex);
         }
 
@@ -138,7 +153,7 @@ public class QuizActivity extends Activity {
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isTrueQuestion();
 
         int messageResId = 0;
-        if (mIsCheater) {
+        if (mCheatedQuestionsBank[mCurrentIndex]) {
             messageResId = R.string.judgment_toast;
         } else {
             if (userPressedTrue == answerIsTrue) {
@@ -194,7 +209,10 @@ public class QuizActivity extends Activity {
         if (data == null) {
           return;
         }
-        mIsCheater = data.getBooleanExtra(CheatActivity.EXTRA_ANSWER_SHOWN, false);
+        boolean isCheater = data.getBooleanExtra(CheatActivity.EXTRA_ANSWER_SHOWN, false);
+        int indiceDePregunta = data.getIntExtra(CURRENT_INDEX, 0);
+        mCheatedQuestionsBank[indiceDePregunta] = isCheater;
+        
     }
 
 
