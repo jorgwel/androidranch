@@ -8,6 +8,7 @@ package com.example.geoquiz;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,8 +33,10 @@ public class CheatActivity extends Activity {
     
     private int mCurrentQuestionIndex;
 
-    private TextView mAnswerTextView;
+    private TextView mAnswerTextView;    
     private Button mShowAnswer;
+    
+    private TextView mBuildVersionTextView;
 
     
     /**
@@ -50,6 +53,10 @@ public class CheatActivity extends Activity {
         mAnswerTextView = (TextView)findViewById(R.id.answerTextView);
 
         mShowAnswer = (Button)findViewById(R.id.showAnswerButton);
+        
+        mBuildVersionTextView = (TextView) findViewById(R.id.buildVersion);
+        
+        mBuildVersionTextView.setText("Versión de android: " + Build.VERSION.SDK_INT);
         
         setAnswerShownResult(false);
         mShowAnswer.setOnClickListener(new View.OnClickListener() {

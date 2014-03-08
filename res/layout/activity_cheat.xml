@@ -21,5 +21,11 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="@string/show_answer_button" />
+  
+  <TextView android:id="@+id/buildVersion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="24dp" 
+            android:text="@string/texto_prueba_build_version"/>
 
 </LinearLayout>

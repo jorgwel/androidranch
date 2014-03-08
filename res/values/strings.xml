@@ -28,5 +28,7 @@
     
     <string name="texto_sordos_pregunta_siguiente">Mostrar pregunta siguiente</string>
     <string name="texto_sordos_pregunta_previa">Mostrar pregunta previa</string>
+    
+    <string name="texto_prueba_build_version">Versión de android</string>
 
 </resources>

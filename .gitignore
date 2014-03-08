@@ -3,3 +3,6 @@ gen/
 .settings/
 .classpath
 /nbandroid/
+build.xml
+local.properties
+private/
