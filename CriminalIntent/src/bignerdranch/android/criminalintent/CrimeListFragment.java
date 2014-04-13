@@ -17,6 +17,13 @@ public class CrimeListFragment extends ListFragment {
     
     private static final String TAG = "CrimeListFragment";
 
+    
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((CrimeAdapter)getListAdapter()).notifyDataSetChanged();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,7 +80,7 @@ public class CrimeListFragment extends ListFragment {
 
             return convertView;
         }
-
+        
     }
     
 }
