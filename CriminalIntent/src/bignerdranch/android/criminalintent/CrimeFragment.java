@@ -1,5 +1,7 @@
 package bignerdranch.android.criminalintent;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +16,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import java.util.Date;
 import java.util.UUID;
 import some.fragments.DatePickerFragment;
 
@@ -22,6 +25,9 @@ public class CrimeFragment extends Fragment{
     
     //Constante para mostrar fragmento de fecha en dialogo
     private static final String DIALOG_DATE = "date";
+    
+    //Código de target
+    private static final int REQUEST_DATE = 0;
     
     private Crime mCrime;
     private EditText mTitleField;
@@ -71,6 +77,9 @@ public class CrimeFragment extends Fragment{
                         .getSupportFragmentManager();
 //                DatePickerFragment dialog = new DatePickerFragment();
                 DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
+                
+                dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
+
                 dialog.show(fm, DIALOG_DATE);
             }
         });
@@ -86,6 +95,18 @@ public class CrimeFragment extends Fragment{
         
         return v;
     }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) return;
+        if (requestCode == REQUEST_DATE) {
+            Date date = (Date)data
+                .getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            mCrime.setDate(date);
+            mDateButton.setText(mCrime.getDate().toString());
+        }
+    }
+    
+    
     
     public static CrimeFragment newInstance(UUID crimeId) {
         Bundle args = new Bundle();
