@@ -17,6 +17,7 @@ public class Crime {
     private UUID mId;
     private String mTitle;
     private Date mDate;
+    private String time;
     private boolean mSolved;
 
     public Crime() {
@@ -54,6 +55,14 @@ public class Crime {
     @Override
     public String toString() {
         return mTitle;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
     
 }

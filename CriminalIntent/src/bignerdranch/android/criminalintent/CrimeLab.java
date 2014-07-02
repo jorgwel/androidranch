@@ -17,6 +17,7 @@ public class CrimeLab {
             Crime newCrime = new Crime();
             newCrime.setTitle("Crime #" + i);
             newCrime.setSolved(i % 2 == 0); // Every other one
+            newCrime.setTime("12:12");
             mCrimes.add(newCrime);
         }
     }
