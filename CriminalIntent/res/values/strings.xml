@@ -10,5 +10,8 @@
     <string name="crimes_title">Crimes</string>
     <string name="date_picker_title">Date of crime:</string>
     <string name="time_picker_title">Time of crime:</string>
+    <string name="button_text_select_dialog">¿Cambiar fecha o tiempo?</string>
+    <string name="button_cambiar_fecha">Cambiar fecha</string>
+    <string name="button_cambiar_hora">Cambiar hora</string>
 
 </resources>
