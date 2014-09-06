@@ -8,3 +8,17 @@ local.properties
 private/
 /geoquiz/nbandroid/
 /CriminalIntent/nbandroid/
+nbandroid/
+bin/
+gen/
+.settings/
+.classpath
+/nbandroid/
+local.properties
+private/
+.project
+/GeneradorDeModelos/build/
+.idea/
+*.iml
+.gradle/
+build/

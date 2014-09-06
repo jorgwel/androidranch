@@ -1,0 +1,3 @@
+include ':CriminalIntent'
+include ':Player'
+include ':geoquiz'
